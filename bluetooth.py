@@ -20,4 +20,4 @@ def register_fingerprint():
 def listen_bluetooth():
     while True:
         print( "Listening to bluetooth")
-        time.sleep(5)
+        time.sleep(1)
