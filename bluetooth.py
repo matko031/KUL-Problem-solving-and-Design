@@ -1,30 +1,25 @@
-from authentication import *
+#from authentication import *
 import time
-"""
-address = "00:0E:0E:0D:7B:08"
-serverMACAddress = address
-port = 3
-s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-s.connect((serverMACAddress,port))
-while 1:
-    text = input()
-    if text == "quit":
-        break
-    s.send(bytes(text, 'UTF-8'))
-s.close()
-"""
+import serial
 
-def register_fingerprint():
-    return "123456"
-
-
-def listen_bluetooth():
-    #listen for bluetooth signal
-    #if signal received
-    id=2
-    print("bluetooth signal received \n")
-
-    auth_fun(id)
-
-
-    return 1
+def bluetooth_read(channel):
+    print("bluetooth started")
+    while True:
+        ser = serial.Serial(port=str(channel), baudrate = 9600, parity = serial.PARITY_NONE, stopbits = serial.STOPBITS_ONE , bytesize = serial.EIGHTBITS, timeout = 1)
+        read = str(ser.readline())
+        newstr = read[2:len(read)-5]
+        
+               
+        if len(newstr) != 0:
+            print(newstr)
+            try:
+                index = newstr.index("x")
+                if int(newstr[index+1:]) >= 150:
+                    id=int(newstr[0:index])
+                    print(id)
+                    authentication(id)
+            except:
+                print("Something went wrong")
+        
+ 
+bluetooth_read('/dev/rfcomm0')

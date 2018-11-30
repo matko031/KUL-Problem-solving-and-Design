@@ -1,19 +1,22 @@
 import json
 from facial_recognition import *
 
-def auth_fun(id):
+def authentication(id):
 
-    id=str(id)
+    id = str(id)
+
     with open('./data.json') as json_file:  # open the json file
         data = json.load(json_file)
 
+
+
     if id in data:
-        facehash = register_face()
-        if facehash == data[id]["face"]:
+        name = check_face()
+        if name == data[id]["first_name"]:
             print("Welcome")
 
         else:
-            print("Go away")
+            print("Go away, wanker")
 
     else:
         print("Please register first \n")

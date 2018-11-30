@@ -1,7 +1,10 @@
 from tkinter import *
 from email_function import *
 from authentication import *
+import registration
 import os.path, json
+
+
 
 def switch_windows(current, new):
     current.destroy()
@@ -46,6 +49,7 @@ def main_gui():
 
 def reg_gui():
 
+
     if os.path.isfile("data.json") == False :
         data={}
         with open('data.json', 'w') as outfile:
@@ -88,7 +92,8 @@ def reg_gui():
             print("empty input")
 
         else:
-            customer_info = {"first_name": first_name_field.get(), "family_name": family_name_field.get(),
+            name = first_name_field.get()
+            customer_info = {"first_name": name, "family_name": family_name_field.get(),
                              "email": email_field.get()}
 
             with open('./data.json') as json_file:
@@ -110,8 +115,14 @@ def reg_gui():
             # call the clear() function
             clear()
 
-        root_reg.destroy()
+        
+        registration.face_registration(name, 5)
+        
+        registration.learn_faces()
+        
+        print("learned")
 
+        switch_windows(root_reg, main_gui)
 
     global root_reg
 
@@ -371,5 +382,4 @@ def email_auth_gui():
 
     # start the GUI
     root_email_auth.mainloop()
-
 
