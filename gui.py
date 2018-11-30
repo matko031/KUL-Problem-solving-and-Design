@@ -1,48 +1,50 @@
 from tkinter import *
 from email_function import *
+from authentication import *
 import os.path, json
 
-def switch_windows(window):
-    root.destroy()
-    window()
+def switch_windows(current, new):
+    current.destroy()
+    new()
 
-def auth_gui():
-    global root
+def main_gui():
 
-    root = Tk()
+    global root_main
+
+    root_main = Tk()
 
     # set the backgroud color of GUI window
-    root.configure(background='light green')
+    root_main.configure(background='light green')
 
     # set the title of the GUI window
-    root.title('authentication form')
+    root_main.title('authentication form')
 
     # set the configuration of the GUI window
-    root.geometry("500x300")
+    root_main.geometry("500x300")
 
     # create a text
-    auth = Label(root, text="AUTHENTICATING", fg="red", background="light green")
+    auth = Label(root_main, text="WELCOME", fg="red", background="light green")
     auth.place(relx=.5, rely=.5, anchor="center")
-    auth.config(font=("Courier", 44))
+    auth.config(font=("Courier", 150))
 
     #create button to send email
-    send_email_button=Button(root, text="send email code", fg="Black", bg="light gray", command= lambda: switch_windows(email_send_gui))
-    send_email_button.pack()
+    send_email_button=Button(root_main, text="send email code", fg="Black", bg="light gray", command= lambda: switch_windows(root_main, email_send_gui))
+    send_email_button.place(relx=.35, rely=.8, anchor="center")
+    send_email_button.config(font=("Courier", 20))
 
-    auth_email_button = Button(root, text="enter email code", fg="Black", bg="light gray", command=lambda: switch_windows(email_auth_gui))
-    auth_email_button.pack()
+    auth_email_button = Button(root_main, text="enter email code", fg="Black", bg="light gray", command=lambda: switch_windows(root_main, email_auth_gui))
+    auth_email_button.place(relx=.65, rely=.8, anchor="center")
+    auth_email_button.config(font=("Courier", 20))
 
-    reg_button = Button(root, text="register", fg="Black", bg="light gray", command=lambda: switch_windows(reg_gui))
-    reg_button.pack()
-
-    root.mainloop()
+    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: switch_windows(root_main, reg_gui))
+    reg_button.place(relx=.5, rely=.8, anchor="center")
+    reg_button.config(font=("Courier", 20))
 
     # start the GUI
 
-    root.mainloop()
+    root_main.mainloop()
 
 def reg_gui():
-    global root
 
     if os.path.isfile("data.json") == False :
         data={}
@@ -108,33 +110,34 @@ def reg_gui():
             # call the clear() function
             clear()
 
-        root.destroy()
+        root_reg.destroy()
 
 
+    global root_reg
 
     # create a GUI window
-    root = Tk()
+    root_reg = Tk()
 
     # set the background colour of GUI window
-    root.configure(background='light green')
+    root_reg.configure(background='light green')
 
     # set the title of GUI window
-    root.title("registration form")
+    root_reg.title("registration form")
 
     # set the configuration of GUI window
-    root.geometry("500x300")
+    root_reg.geometry("500x300")
 
     # create a Form label
-    heading = Label(root, text="Registration form", bg="light green")
+    heading = Label(root_reg, text="Registration form", bg="light green")
 
     # create a first name label
-    first_name = Label(root, text="First name", bg="light green")
+    first_name = Label(root_reg, text="First name", bg="light green")
 
     # create a family name label
-    family_name = Label(root, text="Family name", bg="light green")
+    family_name = Label(root_reg, text="Family name", bg="light green")
 
     # create an email label
-    email = Label(root, text="Email", bg="light green")
+    email = Label(root_reg, text="Email", bg="light green")
 
 
     # grid method is used for placing
@@ -147,9 +150,9 @@ def reg_gui():
 
     # create a text entry box
     # for typing the information
-    first_name_field = Entry(root)
-    family_name_field = Entry(root)
-    email_field = Entry(root)
+    first_name_field = Entry(root_reg)
+    family_name_field = Entry(root_reg)
+    email_field = Entry(root_reg)
 
     # bind method of widget is used for
     # the binding the function with the events
@@ -175,15 +178,18 @@ def reg_gui():
     email_field.grid(row=3, column=1, ipadx="100")
 
     # create a Submit Button and place into the root window
-    submit = Button(root, text="Submit", fg="Black",
-                    bg="Red", command=insert)
+    submit = Button(root_reg, text="Submit", fg="Black", bg="Red", command=insert)
     submit.grid(row=8, column=1)
 
+    back = Button(root_reg, text="<--", fg="Black", bg="Red", command= lambda: switch_windows(root_reg, main_gui) )
+    back.grid(row=9, column=1)
+
+
     # start the GUI
-    root.mainloop()
+    root_reg.mainloop()
 
 def email_send_gui():
-    global root
+    global root_email_send
 
     if os.path.isfile("data.json") == False :
         data={}
@@ -192,22 +198,22 @@ def email_send_gui():
 
 
     # create a GUI window
-    root = Tk()
+    root_email_send = Tk()
 
-    # set the background colour of GUI window
-    root.configure(background='light green')
+    # set the background colour of GUI window 
+    root_email_send.configure(background='light green')
 
     # set the title of GUI window
-    root.title("Bypass code")
+    root_email_send.title("Bypass code")
 
     # set the configuration of GUI window
-    root.geometry("500x300")
+    root_email_send.geometry("500x300")
 
     # create a Form label
-    heading = Label(root, text="Bypass form", bg="light green")
+    heading = Label(root_email_send, text="Bypass form", bg="light green")
 
     # create an email label
-    email = Label(root, text="Email", bg="light green")
+    email = Label(root_email_send, text="Email", bg="light green")
 
 
 
@@ -220,7 +226,7 @@ def email_send_gui():
 
     # create a text entry box
     # for typing the information
-    email_field = Entry(root)
+    email_field = Entry(root_email_send)
 
     # bind method of widget is used for
     # the binding the function with the events
@@ -236,14 +242,17 @@ def email_send_gui():
 
 
     # create a Submit Button and place into the root window
-    submit = Button(root, text="Submit", fg="Black", bg="Red", command= lambda: (send_email(email_field.get()), root.destroy() ) )
+    submit = Button(root_email_send, text="Submit", fg="Black", bg="Red", command= lambda: (send_email(email_field.get()), switch_windows(root_email_send, root_main) ) )
     submit.grid(row=8, column=1)
 
+    back = Button(root_email_send, text="<--", fg="Black", bg="Red", command=lambda: switch_windows(root_email_send, main_gui))
+    back.grid(row=9, column=1)
+
     # start the GUI
-    root.mainloop()
+    root_email_send.mainloop()
 
 def email_auth_gui():
-    global root
+    global root_email_auth
 
     if os.path.isfile("data.json") == False :
         data={}
@@ -299,30 +308,30 @@ def email_auth_gui():
         # call the clear() function
         clear()
 
-        root.destroy()
+        root_email_auth.destroy()
 
 
 
     # create a GUI window
-    root = Tk()
+    root_email_auth = Tk()
 
     # set the background colour of GUI window
-    root.configure(background='light green')
+    root_email_auth.configure(background='light green')
 
     # set the title of GUI window
-    root.title("Bypass code")
+    root_email_auth.title("Bypass code")
 
     # set the configuration of GUI window
-    root.geometry("500x300")
+    root_email_auth.geometry("500x300")
 
     # create a Form label
-    heading = Label(root, text="Bypass form", bg="light green")
+    heading = Label(root_email_auth, text="Bypass form", bg="light green")
 
     # create an email label
-    email = Label(root, text="Email", bg="light green")
+    email = Label(root_email_auth, text="Email", bg="light green")
 
     # create a code label
-    code = Label(root, text="Code", bg="light green")
+    code = Label(root_email_auth, text="Code", bg="light green")
 
 
     # grid method is used for placing
@@ -334,8 +343,8 @@ def email_auth_gui():
 
     # create a text entry box
     # for typing the information
-    email_field = Entry(root)
-    code_field = Entry(root)
+    email_field = Entry(root_email_auth)
+    code_field = Entry(root_email_auth)
 
     # bind method of widget is used for
     # the binding the function with the events
@@ -354,11 +363,13 @@ def email_auth_gui():
 
 
     # create a Submit Button and place into the root window
-    submit = Button(root, text="Submit", fg="Black", bg="Red", command=validate_email_code)
+    submit = Button(root_email_auth, text="Submit", fg="Black", bg="Red", command=validate_email_code)
     submit.grid(row=8, column=1)
 
+    back = Button(root_email_auth, text="<--", fg="Black", bg="Red", command=lambda: switch_windows(root_email_auth, main_gui))
+    back.grid(row=9, column=1)
+
     # start the GUI
-    root.mainloop()
+    root_email_auth.mainloop()
 
 
-auth_gui()

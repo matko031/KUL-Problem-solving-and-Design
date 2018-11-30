@@ -1,3 +1,4 @@
+from authentication import *
 import time
 """
 address = "00:0E:0E:0D:7B:08"
@@ -18,6 +19,12 @@ def register_fingerprint():
 
 
 def listen_bluetooth():
-    while True:
-        print( "Listening to bluetooth")
-        time.sleep(1)
+    #listen for bluetooth signal
+    #if signal received
+    id=2
+    print("bluetooth signal received \n")
+
+    auth_fun(id)
+
+
+    return 1
