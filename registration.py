@@ -38,14 +38,12 @@ def registration():
 
 
 
-def face_registration(name, amount_pictures):
-
+def face_registration(name, amount_pictures, camera):
     
     path = '/home/pi/Documenten/peno3/pi-face-recognition/dataset/'+name
     if os.path.exists(path):
         shutil.rmtree(path)
     os.mkdir(path)
-    camera= picamera.PiCamera()
     camera.resolution= (1280,720)
     camera.start_preview()
     
@@ -62,6 +60,8 @@ def face_registration(name, amount_pictures):
         
         
     camera.stop_preview()
+    camera.close()
+    print("stop preview")
     
 def learn_faces():
 
@@ -106,5 +106,4 @@ def learn_faces():
     f = open("/home/pi/Documenten/peno3/pi-face-recognition/encodings.pickle", "wb")
     f.write(pickle.dumps(data))
     f.close()
-
 

@@ -1,9 +1,14 @@
 from tkinter import *
 from email_function import *
 from authentication import *
+from bluetooth import *
 import registration
 import os.path, json
+import picamera
 
+
+picamera.PiCamera().close()
+camera = picamera.PiCamera()
 
 
 def switch_windows(current, new):
@@ -39,7 +44,7 @@ def main_gui():
     auth_email_button.place(relx=.65, rely=.8, anchor="center")
     auth_email_button.config(font=("Courier", 20))
 
-    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: switch_windows(root_main, reg_gui))
+    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: (bluetooth_send(3, '/dev/rfcomm0'), switch_windows(root_main, reg_gui)))
     reg_button.place(relx=.5, rely=.8, anchor="center")
     reg_button.config(font=("Courier", 20))
 
@@ -116,7 +121,7 @@ def reg_gui():
             clear()
 
         
-        registration.face_registration(name, 5)
+        registration.face_registration(name, 5, camera)
         
         registration.learn_faces()
         

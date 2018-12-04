@@ -1,6 +1,7 @@
 import json
 from facial_recognition import *
 
+
 def authentication(id):
 
     id = str(id)
@@ -11,7 +12,10 @@ def authentication(id):
 
 
     if id in data:
+        print("id in data - authentication.py")
         name = check_face()
+
+        
         if name == data[id]["first_name"]:
             print("Welcome")
 
@@ -22,8 +26,5 @@ def authentication(id):
         print("Please register first \n")
 
     print("Finished")
-
-
-
 
 
