@@ -52,9 +52,3 @@ def send_email(email):
     with open('./data.json', 'w') as outfile:
         json.dump(data, outfile)
 
-
-
-
-
-
-

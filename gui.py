@@ -1,14 +1,15 @@
 from tkinter import *
 from email_function import *
-from authentication import *
-from bluetooth import *
+#from authentication import *
+#from bluetooth import *
 import registration
 import os.path, json
-import picamera
+#import picamera
+import encryption
 
 
-picamera.PiCamera().close()
-camera = picamera.PiCamera()
+#picamera.PiCamera().close()
+#camera = picamera.PiCamera()
 
 
 def switch_windows(current, new):
@@ -44,7 +45,7 @@ def main_gui():
     auth_email_button.place(relx=.65, rely=.8, anchor="center")
     auth_email_button.config(font=("Courier", 20))
 
-    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: (bluetooth_send(3, '/dev/rfcomm0'), switch_windows(root_main, reg_gui)))
+    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: switch_windows(root_main, reg_gui))
     reg_button.place(relx=.5, rely=.8, anchor="center")
     reg_button.config(font=("Courier", 20))
 
@@ -54,11 +55,54 @@ def main_gui():
 
 def reg_gui():
 
-
+    #create json file if it doens't already exist
     if os.path.isfile("data.json") == False :
         data={}
         with open('data.json', 'w') as outfile:
             json.dump(data, outfile)
+    else:
+        with open('./data.json') as json_file:
+            data = json.load(json_file)
+
+    #calculate the id of the next input
+    if len(data)==0:
+        id = 1
+    else:
+        id = int(max(data)) + 1
+
+    #send the id to the arduino and put him in the registration mode
+    #bluetooth_send(id, '/dev/rfcomm0')
+
+
+    # Write the GUI data to the json file
+    def insert(id):
+        # if user hasn't filled anything, print "empty input"
+        if (first_name_field.get() == "" or
+                family_name_field.get() == "" or
+                email_field.get() == ""):
+            name = ""
+            print("empty input")
+
+        else:
+            name = first_name_field.get()
+            customer_info = {"first_name": encryption.encrypt(name,'key.key'), "family_name": encryption.encrypt(family_name_field.get(),'key.key'),
+                             "email": encryption.encrypt(email_field.get(),'key.key')}
+
+
+            data[id]=customer_info
+
+            with open('./data.json', 'w') as outfile:
+                json.dump(data, outfile)
+
+
+        #registration.face_registration(name, 5, camera)
+
+        #registration.learn_faces()
+
+        print("learned")
+
+        switch_windows(root_reg, main_gui)
+
 
     # Function to set focus (cursor)
     def focus1(event):
@@ -83,51 +127,6 @@ def reg_gui():
         family_name_field.delete(0, END)
         email_field.delete(0, END)
 
-
-    # Function to take data from GUI
-    # window and write to an excel file
-    def insert():
-        # if user not fill any entry
-        # then print "empty input"
-
-        if (first_name_field.get() == "" or
-            family_name_field.get() == "" or
-            email_field.get() == ""):
-
-            print("empty input")
-
-        else:
-            name = first_name_field.get()
-            customer_info = {"first_name": name, "family_name": family_name_field.get(),
-                             "email": email_field.get()}
-
-            with open('./data.json') as json_file:
-                data = json.load(json_file)
-
-            if len(data) == 0:
-                data[1] = customer_info
-
-            else:
-                id = int(max(data)) + 1
-                data[id] = customer_info
-
-            with open('./data.json', 'w') as outfile:
-                json.dump(data, outfile)
-
-            # set focus on the name_field box
-            first_name_field.focus_set()
-
-            # call the clear() function
-            clear()
-
-        
-        registration.face_registration(name, 5, camera)
-        
-        registration.learn_faces()
-        
-        print("learned")
-
-        switch_windows(root_reg, main_gui)
 
     global root_reg
 
@@ -194,7 +193,7 @@ def reg_gui():
     email_field.grid(row=3, column=1, ipadx="100")
 
     # create a Submit Button and place into the root window
-    submit = Button(root_reg, text="Submit", fg="Black", bg="Red", command=insert)
+    submit = Button(root_reg, text="Submit", fg="Black", bg="Red", command= lambda : insert(id) )
     submit.grid(row=8, column=1)
 
     back = Button(root_reg, text="<--", fg="Black", bg="Red", command= lambda: switch_windows(root_reg, main_gui) )
@@ -203,6 +202,8 @@ def reg_gui():
 
     # start the GUI
     root_reg.mainloop()
+
+reg_gui()
 
 def email_send_gui():
     global root_email_send

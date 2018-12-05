@@ -1,40 +1,16 @@
-import json, os
-from gui import *
-from bluetooth import *
+import json #, os
+#from gui import *
+#from bluetooth import *
 import time
-import picamera
+#import picamera
 import os
 import cv2
 import shutil
-from imutils.video import VideoStream
+#from imutils.video import VideoStream
 from imutils import paths
 import face_recognition
-import argparse
+#import argparse
 import pickle
-
-
-#registration function
-def registration():
-    reg_gui()
-    
-    # run facial_recognition script
-    
-    face_hash = register_face()
-    
-    
-    # send bluetooth registration signal
-    # receive fingerprint hash
-    fingerprint_hash = register_fingerprint()
-
-    with open('./data.json') as json_file:
-        data = json.load(json_file)
-
-        id = str(max(data))
-        data[id]["fingerprint"] = fingerprint_hash
-        data[id]["face"] = face_hash
-
-        with open('./data.json', 'w') as outfile:
-            json.dump(data, outfile)
 
 
 

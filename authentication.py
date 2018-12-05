@@ -1,5 +1,6 @@
 import json
-from facial_recognition import *
+import facial_recognition
+import encryption
 
 
 def authentication(id):
@@ -12,11 +13,11 @@ def authentication(id):
 
 
     if id in data:
-        print("id in data - authentication.py")
-        name = check_face()
+        face = facial_recognition.check_face()
 
-        
-        if name == data[id]["first_name"]:
+        name = encryption.decrypt(data[id]["first_name"], 'key.key')
+
+        if name == face:
             print("Welcome")
 
         else:
