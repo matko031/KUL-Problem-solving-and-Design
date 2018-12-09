@@ -2,10 +2,11 @@ from tkinter import *
 from email_function import *
 #from authentication import *
 #from bluetooth import *
-import registration
+#import registration
 import os.path, json
 #import picamera
 import encryption
+import time
 
 
 #picamera.PiCamera().close()
@@ -45,7 +46,7 @@ def main_gui():
     auth_email_button.place(relx=.65, rely=.8, anchor="center")
     auth_email_button.config(font=("Courier", 20))
 
-    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: switch_windows(root_main, reg_gui))
+    reg_button = Button(root_main, text="register", fg="Black", bg="light gray", command=lambda: ( switch_windows(root_main, reg_gui)  )
     reg_button.place(relx=.5, rely=.8, anchor="center")
     reg_button.config(font=("Courier", 20))
 
@@ -203,7 +204,29 @@ def reg_gui():
     # start the GUI
     root_reg.mainloop()
 
-reg_gui()
+
+"""
+def bluetooth_gui():
+
+    root_bluetooth = Tk()
+
+    root_bluetooth.configure(background='light green')
+
+    root_bluetooth.title("Register bluetooth")
+
+    root_bluetooth.geometry("500x300")
+
+
+    msg = Label(root_bluetooth, text="Please scan your finger on the fingerprint scanner. After couple of seconds lift the finger and then scan again. Repeat the proccess until you see a registration form on thisi screen", fg="red", background="light green")
+    msg.place(relx=.5, rely=.5, anchor="center")
+    msg.config(font=("Courier", 50))
+
+    time.sleep(5))
+    print("a")
+
+    root_bluetooth.mainloop()
+bluetooth_gui()
+"""
 
 def email_send_gui():
     global root_email_send
@@ -389,3 +412,4 @@ def email_auth_gui():
     # start the GUI
     root_email_auth.mainloop()
 
+main_gui()

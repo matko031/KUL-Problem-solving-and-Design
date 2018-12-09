@@ -49,6 +49,6 @@ def decrypt(text, key):
     file.close()
     f2 = Fernet(key)
     decrypted=f2.decrypt(encoded)
-    return decrypted
+    return decrypted.decode()
 
 

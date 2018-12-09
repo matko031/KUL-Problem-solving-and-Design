@@ -1,8 +1,9 @@
-import random, json, datetime, smtplib, os.path
+import random, json, datetime, smtplib, encryption
 
 
-def send_email(email):
+def send_email(email, key):
 
+    print(email)
 
     with open('./data.json') as json_file:  #open the json file
         data = json.load(json_file)
@@ -26,11 +27,13 @@ def send_email(email):
 
 
     for entry in data:
-        if data[entry]["email"] == email:
-            data[entry]["code"]=code
-            data[entry]["code_timestamp"]=timestamp
-            name = data[entry]["first_name"]
-            surname = data[entry]["family_name"]
+        print(encryption.decrypt(data[entry]["email"], key))
+        if encryption.decrypt(data[entry]["email"], key) == email:
+            data[entry]["code"]=encryption.encrypt(code, key)
+            data[entry]["code_timestamp"]=encryption.encrypt(timestamp, key)
+            name = encryption.decrypt(data[entry]["first_name"], key)
+            surname = encryption.decrypt(data[entry]["family_name"], key)
+
 
             #send the email
 
@@ -39,7 +42,7 @@ def send_email(email):
             password = "wastebasket"  # Your SMTP password for Gmail
             subject = "Bypass code"
             text = "Dear %s %s, \n you have recently requested a code to pass our security system. \n If you haven't requested this code, please" \
-                   "ignore this code, otherwise, here is the code %s " % (name, surname, code)
+                   "ignore this code. Otherwise, the code is:  %s " % (name, surname, code)
 
             smtp_server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             smtp_server.login(sender, password)
